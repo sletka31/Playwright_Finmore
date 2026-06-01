@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { DataGenerator } from '../api/utils/datagenerate';
 
 const BASE_URL = 'https://dev.emeli.in.ua/wp-json/wp/v2';
 
@@ -38,13 +39,13 @@ test.describe('WordPress Posts API - CRUD Tests', () => {
 
         const postData = {
 
-            title: 'Test Post from Playwright',
+            title: DataGenerator.generatePostTitle(),
 
-            content: 'This is test content created via API automation',
+            content: DataGenerator.generatePostContent(),
 
             status: 'publish',
 
-            excerpt: 'Test excerpt'
+            excerpt: DataGenerator.generatePostExcerpt()
 
         };
 
@@ -128,10 +129,12 @@ test.describe('WordPress Posts API - CRUD Tests', () => {
                 'hentry',
                 'category-news'
             ])
-            
+
         );
 
-
+        console.log(postData.title);
+        console.log(postData.content);
+        console.log(postData.excerpt);
         console.log('Created post ID:', createdPostId);
 
     });
@@ -183,7 +186,7 @@ test.describe('WordPress Posts API - CRUD Tests', () => {
         expect(post).toHaveProperty('content');
 
         expect(post).toHaveProperty('date');
-     
+
     });
 
     test('UPDATE - Should update an existing post', async ({ request }) => {

@@ -1,5 +1,17 @@
 import { faker } from '@faker-js/faker';
-import { title } from 'node:process';
+import { DataGenerator } from '../utils/datagenerate';
+
+
+export const generateCustom = () => ({
+   // title: faker.lorem.sentence(),
+    title: DataGenerator.generatePostTitle(),
+    content: DataGenerator.generatePostContent (),
+    status: 'publish',
+    excerpt: DataGenerator.generatePostExcerpt()
+});
+
+
+
 
 export const generatePostData = () => ({
    // title: faker.lorem.sentence(),
