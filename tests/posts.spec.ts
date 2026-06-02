@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { PostsClient } from '../api/clients/posts.client';
-import { generatePostData } from '../api/data/posts.data';
+import { generateCustom } from '../api/data/posts.data';
 
 test.describe('WordPress Posts API (Senior Framework)', () => {
 
@@ -11,7 +11,7 @@ test.describe('WordPress Posts API (Senior Framework)', () => {
     });
 
     test('CREATE post', async () => {
-        const data = generatePostData();
+        const data = generateCustom();
 
         const response = await postsClient.createPost(data);
 
@@ -45,7 +45,7 @@ test.describe('WordPress Posts API (Senior Framework)', () => {
     });
 
     test('UPDATE post', async () => {
-        const created = await postsClient.createPost(generatePostData());
+        const created = await postsClient.createPost(generateCustom());
         const post = await created.json();
 
         const updated = await postsClient.updatePost(post.id, {
@@ -59,7 +59,7 @@ test.describe('WordPress Posts API (Senior Framework)', () => {
     });
 
     test('DELETE post', async () => {
-        const created = await postsClient.createPost(generatePostData());
+        const created = await postsClient.createPost(generateCustom());
         const post = await created.json();
 
         const response = await postsClient.deletePost(post.id);
