@@ -1,69 +1,108 @@
-import { test, expect } from '@playwright/test';
-import { PostsClient } from '../api/clients/posts.client';
-import { generateCustom } from '../api/data/posts.data';
+import { test, expect }
+    from '../fixtures/api.fixture';
 
-test.describe('WordPress Posts API (Senior Framework)', () => {
+import { generateCustom }
+    from '../api/data/posts.data';
 
-    let postsClient: PostsClient;
+test.describe('WordPress Posts API', () => {
 
-    test.beforeEach(async ({ request }) => {
-        postsClient = new PostsClient(request);
-    });
+    test('CREATE post',
+        async ({ postsClient }) => {
 
-    test('CREATE post', async () => {
         const data = generateCustom();
 
-        const response = await postsClient.createPost(data);
+        const response =
+            await postsClient.createPost(data);
 
         expect(response.status()).toBe(201);
 
         const body = await response.json();
 
-        expect(body.title.rendered).toBe(data.title);
-        expect(body.status).toBe('publish');
-        console.log(data);
+        expect(body.title.rendered)
+            .toBe(data.title);
+
+        expect(body.status)
+            .toBe('publish');
+
     });
 
-    test('GET all posts', async () => {
-        const response = await postsClient.getAllPosts();
+    test('GET all posts',
+        async ({ postsClient }) => {
+
+        const response =
+            await postsClient.getAllPosts();
 
         expect(response.ok()).toBeTruthy();
 
         const posts = await response.json();
 
-        expect(Array.isArray(posts)).toBe(true);
+        expect(Array.isArray(posts))
+            .toBe(true);
+
     });
 
-    test('GET post by ID', async () => {
-        const response = await postsClient.getPostById(1);
+    test('GET post by ID',
+        async ({
+            postsClient,
+            createdPost
+        }) => {
+
+        const response =
+            await postsClient.getPostById(
+                createdPost.id
+            );
 
         expect(response.ok()).toBeTruthy();
 
         const post = await response.json();
 
-        expect(post).toHaveProperty('id');
+        expect(post.id)
+            .toBe(createdPost.id);
+
     });
 
-    test('UPDATE post', async () => {
-        const created = await postsClient.createPost(generateCustom());
-        const post = await created.json();
+    test('UPDATE post',
+        async ({
+            postsClient,
+            createdPost
+        }) => {
 
-        const updated = await postsClient.updatePost(post.id, {
-            title: 'Updated title',
-            content: 'Updated content'
-        });
-
-        const body = await updated.json();
-
-        expect(body.title.rendered).toBe('Updated title');
-    });
-
-    test('DELETE post', async () => {
-        const created = await postsClient.createPost(generateCustom());
-        const post = await created.json();
-
-        const response = await postsClient.deletePost(post.id);
+        const response =
+            await postsClient.updatePost(
+                createdPost.id,
+                {
+                    title: 'Updated title',
+                    content: 'Updated content'
+                }
+            );
 
         expect(response.ok()).toBeTruthy();
+
+        const body = await response.json();
+
+        expect(body.title.rendered)
+            .toBe('Updated title');
+
     });
+
+    test('DELETE post',
+        async ({ postsClient }) => {
+
+        const created =
+            await postsClient.createPost(
+                generateCustom()
+            );
+
+        const post = await created.json();
+
+        const response =
+            await postsClient.deletePost(
+                post.id
+            );
+
+        expect(response.ok())
+            .toBeTruthy();
+
+    });
+
 });

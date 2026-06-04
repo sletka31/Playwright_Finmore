@@ -1,30 +1,57 @@
-import { BaseClient } from '../base.client';
-import { routes } from '../routes';
-import { getAuthHeaders } from '../utils/auth';
+import { APIRequestContext }
+    from '@playwright/test';
 
-export class PostsClient extends BaseClient {
+export class PostsClient {
+
+    constructor(
+        private request: APIRequestContext
+    ) {}
+
+    async createPost(data: object) {
+
+        return await this.request.post('/posts', {
+            data
+        });
+
+    }
 
     async getAllPosts() {
-        return this.get(routes.posts.base);
+
+        return await this.request.get('/posts');
+
     }
 
     async getPostById(id: number) {
-        return this.get(routes.posts.byId(id));
+
+        return await this.request.get(`/posts/${id}`);
+
     }
 
-    async createPost(data: any) {
-        return this.post(routes.posts.base, data, getAuthHeaders());
-    }
+    async updatePost(
+        id: number,
+        data: object
+    ) {
 
-    async updatePost(id: number, data: any) {
-        return this.put(routes.posts.byId(id), data, getAuthHeaders());
-    }
+        return await this.request.put(
+            `/posts/${id}`,
+            {
+                data
+            }
+        );
 
-    async patchPost(id: number, data: any) {
-        return this.patch(routes.posts.byId(id), data, getAuthHeaders());
     }
 
     async deletePost(id: number) {
-        return this.delete(routes.posts.byId(id), getAuthHeaders());
+
+        return await this.request.delete(
+            `/posts/${id}`,
+            {
+                params: {
+                    force: true
+                }
+            }
+        );
+
     }
+
 }
