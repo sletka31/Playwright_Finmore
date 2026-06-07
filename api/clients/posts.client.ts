@@ -7,23 +7,27 @@ export class PostsClient {
         private request: APIRequestContext
     ) {}
 
-    async createPost(data: object) {
-
-        return await this.request.post('/posts', {
+  
+   async createPost(data: object) {
+ 
+    return await this.request.post(
+        'posts',
+        {
             data
-        });
-
-    }
+        }
+    );
+ 
+}
 
     async getAllPosts() {
 
-        return await this.request.get('/posts');
+        return await this.request.get('posts');
 
     }
 
     async getPostById(id: number) {
 
-        return await this.request.get(`/posts/${id}`);
+        return await this.request.get(`posts/${id}`);
 
     }
 
@@ -33,7 +37,7 @@ export class PostsClient {
     ) {
 
         return await this.request.put(
-            `/posts/${id}`,
+            `posts/${id}`,
             {
                 data
             }
@@ -44,7 +48,7 @@ export class PostsClient {
     async deletePost(id: number) {
 
         return await this.request.delete(
-            `/posts/${id}`,
+            `posts/${id}`,
             {
                 params: {
                     force: true

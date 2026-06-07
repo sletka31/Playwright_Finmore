@@ -100,8 +100,7 @@ test.describe('WordPress Posts API', () => {
                 post.id
             );
 
-        expect(response.ok())
-            .toBeTruthy();
+        expect(response.status()).toBe(200)
 
     });
 
