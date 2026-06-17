@@ -4,10 +4,13 @@ import { RegisterPage } from '../pages/RegisterPage';
 import { RandomDataGenerator } from '../api/utils/general.data.generate';
 
 test.describe('Register user', () => {
-    
+
     let loginPage: LoginPage;
     let registerPage: RegisterPage;
     const email = RandomDataGenerator.randomEmail();
+    const firstName = RandomDataGenerator.randomFirstName();
+    const lastName = RandomDataGenerator.randomLastName();
+
     test.beforeEach(async ({ page }) => {
         loginPage = new LoginPage(page);
         registerPage = new RegisterPage(page);
@@ -20,7 +23,7 @@ test.describe('Register user', () => {
 
     test('Реєстрація нового юзера', async () => {
 
-        await registerPage.checkRegister('Петренко Іванна', email, '123456', '1234560', 'UAH');
+        await registerPage.checkRegister(`${firstName} ${lastName}`, email, '123456', '123456', 'UAH');
 
     })
 })
